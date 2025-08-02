@@ -9,7 +9,20 @@ const generateToken = (userId) => {
 };
 
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body; 
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ message: "Password must be at least 6 characters" });
+  }
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -17,23 +30,24 @@ const registerUser = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({
-    name, 
-    email,
-    password: hashedPassword,
-  });
+  const user = await User.create({ name, email, password: hashedPassword });
 
   res.status(201).json({
     _id: user._id,
-    name: user.name, 
+    name: user.name,
     email: user.email,
     token: generateToken(user._id),
   });
 };
 
 
+
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
 
   const user = await User.findOne({ email });
   if (!user) {
@@ -47,11 +61,12 @@ const loginUser = async (req, res) => {
 
   res.json({
     _id: user._id,
-    name: user.name, 
+    name: user.name,
     email: user.email,
     token: generateToken(user._id),
   });
 };
+
 
 
 const updateUser = async (req, res) => {
