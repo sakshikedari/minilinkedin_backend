@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://mini-linkedin-frontend.vercel.app'], // add both dev & deployed frontend URLs
+  origin: ['https://mini-linkedin-frontend-sage.vercel.app/'], // add both dev & deployed frontend URLs
   credentials: true,
 }));
 
