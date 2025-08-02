@@ -51,15 +51,24 @@ const loginUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const user = req.user;
-    const { bio } = req.body;
+    const user = await User.findById(req.user._id); // safer: get fresh user from DB
 
+    const { bio } = req.body;
     if (!bio) return res.status(400).json({ message: 'Bio is required' });
 
     user.bio = bio;
     await user.save();
 
-    res.json({ user });
+    res.json({
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        bio: user.bio,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: 'Update failed', error: error.message });
   }
