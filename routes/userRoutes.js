@@ -4,6 +4,6 @@ const { registerUser, loginUser } = require('../controllers/userController');
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.patch('/update', protect, updateUser);
+router.patch('/update', updateUser);
 
 module.exports = router;
