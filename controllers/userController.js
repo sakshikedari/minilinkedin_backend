@@ -49,6 +49,22 @@ const loginUser = async (req, res) => {
   });
 };
 
+exports.updateUser = async (req, res) => {
+  try {
+    const user = req.user; 
+    const { bio } = req.body;
+
+    if (!bio) return res.status(400).json({ message: 'Bio is required' });
+
+    user.bio = bio;
+    await user.save();
+
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({ message: 'Update failed', error: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
