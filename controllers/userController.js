@@ -49,9 +49,9 @@ const loginUser = async (req, res) => {
   });
 };
 
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
-    const user = req.user; 
+    const user = req.user;
     const { bio } = req.body;
 
     if (!bio) return res.status(400).json({ message: 'Bio is required' });
@@ -68,5 +68,6 @@ exports.updateUser = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  updateUser,
 };
 
